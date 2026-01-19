@@ -454,6 +454,21 @@ class TestBase:
         with pytest.raises(ValueError, match="The length of ids "):
             graph.Graph.from_dense(dense_binary, ids=["staten_island", "queens"])
 
+    def test_from_dense_boolean(self):
+        dense = np.array(
+            [[True, False, True], [False, True, False], [True, False, True]]
+        )
+        g = graph.Graph.from_dense(dense)
+        expected = graph.Graph.from_arrays(
+            [0, 0, 1, 2, 2], [0, 2, 1, 0, 2], [1.0, 1.0, 1.0, 1.0, 1.0]
+        )
+        pd.testing.assert_series_equal(
+            g.adjacency,
+            expected.adjacency,
+            check_dtype=False,
+            check_index_type=False,
+        )
+
     def test_from_arrays(self):
         focal_ids = np.arange(9)
         neighbor_ids = np.array([1, 2, 5, 4, 5, 8, 7, 8, 7])

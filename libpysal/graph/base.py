@@ -389,6 +389,9 @@ class Graph(SetOpsMixin):
         """
         from scipy import sparse
 
+        if dense.dtype == bool:
+            dense = dense.astype(float)
+
         return cls.from_sparse(sparse.csr_array(dense), ids=ids)
 
     @classmethod

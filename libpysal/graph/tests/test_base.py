@@ -460,12 +460,11 @@ class TestBase:
         )
         g = graph.Graph.from_dense(dense)
         expected = graph.Graph.from_arrays(
-            [0, 0, 1, 2, 2], [0, 2, 1, 0, 2], [1.0, 1.0, 1.0, 1.0, 1.0]
+            [0, 0, 1, 2, 2], [0, 2, 1, 0, 2], [1, 1, 1, 1, 1]
         )
         pd.testing.assert_series_equal(
             g.adjacency,
             expected.adjacency,
-            check_dtype=False,
             check_index_type=False,
         )
 

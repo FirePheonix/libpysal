@@ -212,17 +212,28 @@ def _knn(coordinates, metric="euclidean", k=1, p=2, coplanar="raise", tree=None)
         coordinates, ids=None, valid_geometry_types=_VALID_GEOMETRY_TYPES
     )
     if coplanar == "jitter":
+        if tree is not None:
+            raise ValueError(
+                "Cannot using a pre-built tree when `coplanar='jitter'`. "
+                "The coordinates are modified during jittering, invalidating the "
+                "tree. Please strip the 'tree' argument or set `coplanar='raise'` "
+                "or `coplanar='clique'`."
+            )
         coordinates, geoms = _jitter_geoms(coordinates, geoms=geoms)
-        tree = None
 
     n_coplanar = geoms.geometry.duplicated().sum()
     n_samples, _ = coordinates.shape
 
     if n_coplanar == 0:
         if metric == "haversine":
+            if tree is not None:
+                raise ValueError(
+                    "Cannot using a pre-built tree when `metric='haversine'`. "
+                    "The coordinates are transformed (deg to rad) for this metric, "
+                    "invalidating the tree. Please strip the 'tree' argument."
+                )
             # sklearn haversine works with (lat,lng) in radians...
             coordinates = numpy.fliplr(numpy.deg2rad(coordinates))
-            tree = None
         # Use provided tree if available, otherwise build one
         if tree is not None and hasattr(tree, "query"):
             query = tree.query

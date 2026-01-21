@@ -1,4 +1,4 @@
-files: "libpysal\/|docs\/"
+files: "libpysal\/|docs\/|scripts\/"
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: "v0.14.10"

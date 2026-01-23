@@ -397,7 +397,7 @@ class TestBase:
         expected = graph.Graph.from_arrays(
             [0, 0, 1, 2, 3, 3], [1, 3, 3, 2, 1, 3], [0.1, 0.5, 0.9, 0.0, 0.3, 0.1]
         )
-        assert g == expected, "dense constructor does not match arrays constructor"
+        pd.testing.assert_series_equal(g._adjacency, expected._adjacency)
 
         ids = ["zero", "one", "two", "three"]
         g_named = graph.Graph.from_dense(dense, ids=ids)
@@ -406,7 +406,7 @@ class TestBase:
             ["one", "three", "three", "two", "one", "three"],
             [0.1, 0.5, 0.9, 0.0, 0.3, 0.1],
         )
-        assert g_named == expected, "dense with ids does not match arrays constructor"
+        pd.testing.assert_series_equal(g_named._adjacency, expected._adjacency)
 
         dense_binary = np.array(
             [
@@ -446,9 +446,9 @@ class TestBase:
                 "queens",
                 "manhattan",
             ],
-            np.ones(10),
+            np.ones(10, dtype="int64"),
         )
-        assert g == expected, "dense nybb with ids does not match arrays constructor"
+        pd.testing.assert_series_equal(g._adjacency, expected._adjacency)
         np.testing.assert_array_equal(g.sparse.todense(), dense_binary)
 
         with pytest.raises(ValueError, match="The length of ids "):
@@ -460,12 +460,13 @@ class TestBase:
         )
         g = graph.Graph.from_dense(dense)
         expected = graph.Graph.from_arrays(
-            [0, 0, 1, 2, 2], [0, 2, 1, 0, 2], [1, 1, 1, 1, 1]
+            np.array([0, 0, 1, 2, 2], dtype="int32"),
+            np.array([0, 2, 1, 0, 2], dtype="int32"),
+            [1, 1, 1, 1, 1],
         )
         pd.testing.assert_series_equal(
-            g.adjacency,
-            expected.adjacency,
-            check_index_type=False,
+            g._adjacency,
+            expected._adjacency,
         )
 
     def test_from_arrays(self):

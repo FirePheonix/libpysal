@@ -407,6 +407,79 @@ class Graph(SetOpsMixin):
 
         return w
 
+    def scale_by_kernel(
+        self, values, bandwidth=None, kernel="gaussian", metric="euclidean"
+    ):
+        """
+        Scale existing weights by a kernel function over a secondary variable.
+
+        This is useful for spatiotemporal weights where the spatial weight
+        is multiplied by a temporal weight.
+
+        Parameters
+        ----------
+        values : array-like | pandas.Series
+            Values for each observation aligned with the graph's unique_ids.
+            If array, must clearly match the order of self.unique_ids.
+            If Series, index must match self.unique_ids.
+        bandwidth : float
+            Bandwidth for the kernel function.
+        kernel : str, optional
+            Kernel function to use, by default "gaussian".
+        metric : str, optional
+            Distance metric to use, by default "euclidean".
+
+        Returns
+        -------
+        Graph
+            A new Graph with scaled weights.
+        """
+        if isinstance(values, pd.Series):
+            values = values.reindex(self.unique_ids).values
+        else:
+            values = np.asarray(values)
+            if len(values) != len(self.unique_ids):
+                raise ValueError(
+                    f"Values length {len(values)} does not match graph size {len(self.unique_ids)}"
+                )
+
+        adj = self._adjacency.reset_index()
+
+        # Map values to focal and neighbor
+        id_to_idx = {uid: i for i, uid in enumerate(self.unique_ids)}
+
+        focal_indices = adj["focal"].map(id_to_idx).values
+        neighbor_indices = adj["neighbor"].map(id_to_idx).values
+
+        focal_vals = values[focal_indices]
+        neighbor_vals = values[neighbor_indices]
+
+        # Ensure 2D for distance computation (sklearn/scipy expectation)
+        if focal_vals.ndim == 1:
+            focal_vals = focal_vals.reshape(-1, 1)
+        if neighbor_vals.ndim == 1:
+            neighbor_vals = neighbor_vals.reshape(-1, 1)
+
+        # Compute distances just for the edges
+        if metric == "euclidean" and focal_vals.shape[1] == 1:
+            dists = np.abs(focal_vals - neighbor_vals).flatten()
+        else:
+            dists = np.linalg.norm(focal_vals - neighbor_vals, axis=1)
+
+        from ._kernel import _kernel_functions
+
+        if kernel not in _kernel_functions:
+            raise ValueError(f"Kernel '{kernel}' not supported.")
+
+        kernel_func = _kernel_functions[kernel]
+
+        k_weights = kernel_func(dists, bandwidth)
+        new_weights = adj["weight"] * k_weights
+
+        return Graph.from_arrays(
+            adj["focal"].values, adj["neighbor"].values, new_weights.values
+        )
+
     @classmethod
     def from_weights_dict(cls, weights_dict):
         """Generate Graph from a dict of dicts

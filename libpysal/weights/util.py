@@ -15,9 +15,8 @@ from scipy.spatial import KDTree
 from shapely.geometry.base import BaseGeometry
 
 from ..common import requires
-from ..io.fileio import FileIO
+
 from .set_operations import w_subset
-from .weights import WSP, W
 
 try:
     import geopandas  # noqa: F401 -- needed to determine availability
@@ -136,6 +135,8 @@ def hexLat2W(nrows=5, ncols=5, **kwargs):
                 else:
                     w[i] = w.get(i, []) + jne
                     w[i] = w.get(i, []) + jnw
+
+    from .weights import W
 
     return W(w, **kwargs)
 
@@ -1097,6 +1098,8 @@ def get_points_array_from_shapefile(shapefile):
            [ 8.33265837, 14.03162401],
            [ 9.01226541, 13.81971908]])
     """
+
+    from ..io.fileio import FileIO
 
     f = FileIO(shapefile)
     data = get_points_array(f)

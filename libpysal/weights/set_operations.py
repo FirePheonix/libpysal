@@ -14,7 +14,6 @@ import copy
 from numpy import ones
 from scipy.sparse import issparse
 
-
 __all__ = [
     "w_union",
     "w_intersection",
@@ -76,8 +75,6 @@ def w_union(w1, w2, **kwargs):
             neighbors[i] = list(add_neigh)
         else:
             neighbors[i] = copy.copy(w2.neighbors[i])
-    from .weights import W
-    from .weights import W
     from .weights import W
 
     return W(neighbors, **kwargs)
@@ -150,8 +147,6 @@ def w_intersection(w1, w2, w_shape="w1", **kwargs):
         else:
             neighbors[i] = []
 
-    from .weights import W
-    from .weights import W
     from .weights import W
 
     return W(neighbors, **kwargs)
@@ -247,7 +242,6 @@ def w_difference(w1, w2, w_shape="w1", constrained=True, **kwargs):
             neighbors[i] = list(set(neighbors[i]).intersection(constrained_keys))
 
     from .weights import W
-    from .weights import W
 
     return W(neighbors, **kwargs)
 
@@ -341,7 +335,6 @@ def w_symmetric_difference(w1, w2, w_shape="all", constrained=True, **kwargs):
         for i in constrained_keys:
             neighbors[i] = list(set(neighbors[i]).intersection(constrained_keys))
 
-    from .weights import W
     from .weights import W
 
     return W(neighbors, **kwargs)

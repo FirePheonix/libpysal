@@ -1,7 +1,7 @@
 import geopandas as gpd
 import numpy as np
-from scipy.sparse import linalg as spla
 from geodatasets import get_path
+from scipy.sparse import linalg as spla
 
 from libpysal.graph import Graph
 

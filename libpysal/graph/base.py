@@ -440,7 +440,8 @@ class Graph(SetOpsMixin):
             values = np.asarray(values)
             if len(values) != len(self.unique_ids):
                 raise ValueError(
-                    f"Values length {len(values)} does not match graph size {len(self.unique_ids)}"
+                    f"Values length {len(values)} does not match "
+                    f"graph size {len(self.unique_ids)}"
                 )
 
         adj = self._adjacency.reset_index()

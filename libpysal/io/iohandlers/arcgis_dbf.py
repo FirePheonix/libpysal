@@ -226,8 +226,8 @@ class ArcGISDbfIO(fileio.FileIO):
 
         self._complain_ifclosed(self.closed)
 
-        from ...weights.weights import W
         from ...weights.util import remap_ids
+        from ...weights.weights import W
 
         if issubclass(type(obj), W):
             self.file.header = [self.varName, "NID", "WEIGHT"]

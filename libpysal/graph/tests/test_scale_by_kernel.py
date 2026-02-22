@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import pytest
+
 from libpysal import graph
 
 
@@ -55,7 +55,6 @@ class TestScaleByKernel:
         assert np.isclose(weights.loc[0, 1], expected_weight)
 
     def test_scale_by_kernel_bisquare(self):
-
         values = [0, 0.5, 1.0]
         g_scaled = self.g.scale_by_kernel(values, bandwidth=1.0, kernel="bisquare")
 

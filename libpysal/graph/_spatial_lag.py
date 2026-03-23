@@ -2,6 +2,117 @@ import numpy as np
 import pandas as pd
 
 
+def _weighted_covariance(graph, X):
+    """Geographically weighted covariance matrix at each focal point.
+
+    For each focal observation *i*, computes the geographically weighted
+    covariance matrix using the kernel weights stored in the graph:
+
+        Σ(uᵢ, vᵢ) = Xᵀ W(uᵢ, vᵢ) X
+
+    where W(uᵢ, vᵢ) is the diagonal matrix of kernel weights for location *i*.
+    This is the core building block for Geographically Weighted PCA (GWPCA) as
+    described in Harris, Brunsdon & Charlton (2011, Eq. 4) and for Geographically
+    Weighted Mahalanobis Distance (GWMD) as described in Harris et al. (2014).
+
+    The implementation translates GWmodel's ``wpca`` weighted centering step::
+
+        # R (GWmodel):
+        local.center <- function(x, wt)
+            sweep(x, 2, colSums(sweep(x, 1, wt, '*')) / sum(wt))
+
+    Parameters
+    ----------
+    graph : Graph
+        A ``libpysal.graph.Graph`` whose weights are kernel weights (e.g. built
+        with ``Graph.build_kernel``). Row-standardised graphs are *not*
+        appropriate here as they destroy the relative weight magnitudes.
+    X : array-like, shape (n, p)
+        Multivariate data matrix. Rows must align with ``graph.unique_ids`` in
+        the same order. Should typically be standardised (zero mean, unit
+        variance) before calling, following Harris et al. (2011, §3).
+
+    Returns
+    -------
+    means : numpy.ndarray, shape (n_focal, p)
+        Geographically weighted mean vector at each focal point.
+    covariances : numpy.ndarray, shape (n_focal, p, p)
+        Geographically weighted covariance matrix at each focal point.
+    focal_ids : list
+        Ordered list of focal IDs matching the first axis of ``means`` and
+        ``covariances``.
+
+    Examples
+    --------
+    >>> import geopandas as gpd
+    >>> import numpy as np
+    >>> from geodatasets import get_path
+    >>> from libpysal.graph import Graph
+    >>> gdf = gpd.read_file(get_path("geoda.guerry")).set_geometry(
+    ...     lambda g: g.centroid
+    ... )
+    >>> X = gdf[["Crm_prs", "Litercy", "Wealth"]].values.astype(float)
+    >>> g = Graph.build_kernel(gdf.geometry, kernel="bisquare", bandwidth=50)
+    >>> means, covs, ids = _weighted_covariance(g, X)
+    >>> covs.shape  # (n_focal, 3, 3)
+    (85, 3, 3)
+
+    References
+    ----------
+    Harris P, Brunsdon C, Charlton M (2011). Geographically weighted principal
+    components analysis. International Journal of Geographical Information
+    Science, 25(11), 1717-1736.
+
+    Harris P, Brunsdon C, Charlton M, Juggins S, Clarke A (2014). Multivariate
+    spatial outlier detection using robust geographically weighted methods.
+    Mathematical Geosciences, 46(1), 1-31.
+    """
+    if not isinstance(X, np.ndarray):
+        X = np.asarray(X, dtype=float)
+    else:
+        X = X.astype(float)
+
+    adjacency = graph._adjacency
+    focal_ids = list(graph.unique_ids)
+    n_focal = len(focal_ids)
+    p = X.shape[1]
+
+    # Build an index mapping from focal_id → row position in X
+    id_to_pos = {fid: i for i, fid in enumerate(focal_ids)}
+
+    means = np.empty((n_focal, p), dtype=float)
+    covariances = np.empty((n_focal, p, p), dtype=float)
+
+    for fi, focal_id in enumerate(focal_ids):
+        # Neighbour weights for this focal point
+        nbr = adjacency.loc[focal_id]
+        wt = nbr.values.astype(float)
+        wt_sum = wt.sum()
+
+        if wt_sum == 0 or len(wt) == 0:
+            means[fi] = np.full(p, np.nan)
+            covariances[fi] = np.full((p, p), np.nan)
+            continue
+
+        # Gather neighbour rows from X
+        nbr_positions = [id_to_pos[nid] for nid in nbr.index]
+        X_nbr = X[nbr_positions]
+
+        # Geographically weighted mean  —  Harris et al. (2011), §2.3
+        # μ̂ = Σ(wⱼ xⱼ) / Σwⱼ
+        w_mean = np.average(X_nbr, axis=0, weights=wt)
+        means[fi] = w_mean
+
+        # Geographically weighted covariance  —  Harris et al. (2011), Eq. 4
+        # Σ(u,v) = Xᵀ W X / Σwⱼ
+        # Equivalent to: X_scaled.T @ X_scaled  where X_scaled = √w · (X − μ̂)
+        X_c = X_nbr - w_mean
+        X_sc = X_c * np.sqrt(wt[:, np.newaxis])
+        covariances[fi] = (X_sc.T @ X_sc) / wt_sum
+
+    return means, covariances, focal_ids
+
+
 def _lag_spatial(graph, y, categorical=False, ties="raise"):
     """Spatial lag operator
 

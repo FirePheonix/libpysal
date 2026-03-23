@@ -2259,6 +2259,79 @@ class Graph(SetOpsMixin):
         """
         return _lag_spatial(self, y, categorical=categorical, ties=ties)
 
+    def weighted_covariance(self, X):
+        """Geographically weighted covariance matrix at each focal point.
+
+        For each focal observation *i*, computes the geographically weighted
+        covariance matrix using the kernel weights stored in this graph:
+
+            Σ(uᵢ, vᵢ) = Xᵀ W(uᵢ, vᵢ) X
+
+        where W(uᵢ, vᵢ) is the diagonal matrix of kernel weights for location
+        *i* and the data are geographically weighted-centred before forming the
+        quadratic product.
+
+        This is the core building block for Geographically Weighted PCA (GWPCA)
+        as described in Harris, Brunsdon & Charlton (2011, Eq. 4), and for
+        Geographically Weighted Mahalanobis Distance (GWMD) as described in
+        Harris et al. (2014).
+
+        Parameters
+        ----------
+        X : array-like, shape (n, p)
+            Multivariate data matrix. Rows must align with ``self.unique_ids``
+            in the same order. Should be standardised (zero mean, unit variance)
+            before calling for most geographically weighted decomposition
+            methods, following Harris et al. (2011, §3).
+
+        Returns
+        -------
+        means : numpy.ndarray, shape (n_focal, p)
+            Geographically weighted mean vector at each focal point.
+        covariances : numpy.ndarray, shape (n_focal, p, p)
+            Geographically weighted covariance matrix at each focal point.
+        focal_ids : list
+            Ordered list of focal IDs, aligned with the first axis of
+            ``means`` and ``covariances``.
+
+        Notes
+        -----
+        Use a kernel graph (built with :meth:`build_kernel`) rather than a
+        row-standardised graph, because row standardisation destroys the
+        relative weight magnitudes required for the covariance calculation.
+
+        Examples
+        --------
+        >>> import geopandas as gpd
+        >>> import numpy as np
+        >>> from geodatasets import get_path
+        >>> from libpysal import graph
+        >>> gdf = gpd.read_file(get_path("geoda.guerry"))
+        >>> gdf = gdf.set_geometry(gdf.centroid)
+        >>> X = gdf[["Crm_prs", "Litercy", "Wealth"]].values.astype(float)
+        >>> g = graph.Graph.build_kernel(gdf.geometry, kernel="bisquare",
+        ...                             bandwidth=50)
+        >>> means, covs, ids = g.weighted_covariance(X)
+        >>> covs.shape
+        (85, 3, 3)
+        >>> # Covariance matrices are symmetric
+        >>> np.allclose(covs[0], covs[0].T)
+        True
+
+        References
+        ----------
+        Harris P, Brunsdon C, Charlton M (2011). Geographically weighted
+        principal components analysis. International Journal of Geographical
+        Information Science, 25(11), 1717-1736.
+
+        Harris P, Brunsdon C, Charlton M, Juggins S, Clarke A (2014).
+        Multivariate spatial outlier detection using robust geographically
+        weighted methods. Mathematical Geosciences, 46(1), 1-31.
+        """
+        from ._spatial_lag import _weighted_covariance
+
+        return _weighted_covariance(self, X)
+
     def to_parquet(self, path, **kwargs):
         """Save Graph to a Apache Parquet
 

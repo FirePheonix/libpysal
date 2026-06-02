@@ -24,7 +24,7 @@ def _vertex_set_intersection(geoms, rook=True, ids=None, by_perimeter=False):
         whether to compute vertex set intersection contiguity by edge or by point.
         By default, vertex set contiguity is computed by edge. This means that at least
         two adjacent vertices on the polygon boundary must be shared.
-    ids : numpy.ndarray (default: None)
+    ids : ndarray (default: None)
         names to use for indexing the graph constructed from geoms. If None (default),
         an index is extracted from `geoms`. If `geoms` has no index, a pandas.RangeIndex
         is constructed.
@@ -105,7 +105,7 @@ def _queen(geoms, ids=None, by_perimeter=False):
         The container for the geometries to compute contiguity. Regardless of
         the containing type, the geometries within the container must be Polygons
         or MultiPolygons.
-    ids : numpy.ndarray (default: None)
+    ids : ndarray (default: None)
         names to use for indexing the graph constructed from geoms. If None (default),
         an index is extracted from `geoms`. If `geoms` has no index, a pandas.RangeIndex
         is constructed.
@@ -149,7 +149,7 @@ def _rook(geoms, ids=None, by_perimeter=False):
         The container for the geometries to compute contiguity. Regardless of
         the containing type, the geometries within the container must be Polygons
         or MultiPolygons.
-    ids : numpy.ndarray (default: None)
+    ids : ndarray (default: None)
         names to use for indexing the graph constructed from geoms. If None (default),
         an index is extracted from `geoms`. If `geoms` has no index, a pandas.RangeIndex
         is constructed.

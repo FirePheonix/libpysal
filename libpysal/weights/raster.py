@@ -895,7 +895,7 @@ def _chunk_generator(
 
     Yields
     ------
-    ids_chunk : numpy.ndarray
+    ids_chunk : ndarray
         (n_chunk,) array containing the chunk of non-missing raster data
     """
     chunk_size = starts[1] - starts[0]

@@ -103,7 +103,7 @@ def _categorical(graph, y, ties):
     Parameters
     ----------
     graph : object
-    y : array-like (numpy.ndarray or pandas.Series)
+    y : array-like (ndarray or pandas.Series)
         Categorical labels for each observation.
     ties : {'raise', 'random', 'tryself'}
         How to handle ties when multiple neighbor categories are equally frequent:
@@ -115,7 +115,7 @@ def _categorical(graph, y, ties):
 
     Returns
     -------
-    numpy.ndarray
+    ndarray
         An array of categorical spatial lag values aligned with graph.unique_ids.
 
     Raises

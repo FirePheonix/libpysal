@@ -37,13 +37,13 @@ def _spatial_matching(
 
     Parameters
     ----------
-    x : numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+    x : ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
         geometries that need matches. If a geopandas.Geo* object
-        is provided, the .geometry attribute is used. If a numpy.ndarray with
+        is provided, the .geometry attribute is used. If a ndarray with
         a geometry dtype is used, then the coordinates are extracted and used.
-    y : numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame (default: None)
+    y : ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame (default: None)
         geometries that are used as a source for matching. If a geopandas.Geo* object
-        is provided, the .geometry attribute is used. If a numpy.ndarray with
+        is provided, the .geometry attribute is used. If a ndarray with
         a geometry dtype is used, then the coordinates are extracted and
         used. If none, matches are made within `x`.
     n_matches : int (default: None)

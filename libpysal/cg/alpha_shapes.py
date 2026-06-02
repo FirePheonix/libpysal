@@ -593,7 +593,7 @@ def construct_bounding_circles(alpha_shape, radius):
 
     Returns
     -------
-    center : numpy.ndarray of shape (n,2)
+    center : ndarray of shape (n,2)
         The centers of the circles defining the alpha_shape.
     """
     coordinates = list(alpha_shape.boundary.coords)

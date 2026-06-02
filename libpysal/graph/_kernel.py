@@ -55,9 +55,9 @@ def _kernel(
 
     Paramters
     ---------
-    coordinates : numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+    coordinates : ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
         geometries over which to compute a kernel. If a geopandas.Geo* object
-        is provided, the .geometry attribute is used. If a numpy.ndarray with
+        is provided, the .geometry attribute is used. If a ndarray with
         a geometry dtype is used, then the coordinates are extracted and used.
     bandwidth : float or "auto" or "adaptive" (default: None)
         distance to use in the kernel computation. Should be on the same scale as

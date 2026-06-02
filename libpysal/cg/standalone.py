@@ -1219,7 +1219,7 @@ def distance_matrix(X, p=2.0, threshold=5e7):
 
     Parameters
     ----------
-    X : numpy.ndarray
+    X : ndarray
         An :math:`n \\times k` array where :math:`n` is the number
         of observations and :math:`k` is the number of dimensions
         (2 for :math:`x,y`).
@@ -1235,7 +1235,7 @@ def distance_matrix(X, p=2.0, threshold=5e7):
 
     Returns
     -------
-    d : numpy.ndarray
+    d : ndarray
         An n by :math:`m` :math:`p`-norm distance matrix.
 
     Raises

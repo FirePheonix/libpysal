@@ -67,7 +67,7 @@ class DataTable(fileio.FileIO):
             raise AttributeError(f"Field: {key} does not exist in header.")
 
     def by_col_array(self, *args):
-        """Return columns of table as a ``numpy.ndarray``.
+        """Return columns of table as a ``ndarray``.
 
         Parameters
         ----------
@@ -76,7 +76,7 @@ class DataTable(fileio.FileIO):
 
         Returns
         -------
-        results : numpy.ndarray
+        results : ndarray
             An array of shape :math:`(n,k)`.
 
         Notes

@@ -482,11 +482,11 @@ class Graph(SetOpsMixin):
 
     @classmethod
     def from_dense(cls, dense, ids=None):
-        """Convert a ``numpy.ndarray`` of a shape (N, N) to a PySAL ``Graph`` object.
+        """Convert a ``ndarray`` of a shape (N, N) to a PySAL ``Graph`` object.
 
         Parameters
         ----------
-        dense : numpy.ndarray
+        dense : ndarray
             dense representation of a graph
         ids : list-like, default None
             list-like of ids for geometries that is mappable to
@@ -861,12 +861,12 @@ class Graph(SetOpsMixin):
 
         Parameters
         ----------
-        data : numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+        data : ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
             geometries containing locations to compute the
             delaunay triangulation. If a geopandas object with Point
-            geometry is provided, the .geometry attribute is used. If a numpy.ndarray
+            geometry is provided, the .geometry attribute is used. If a ndarray
             with shapely geometry is used, then the coordinates are extracted and used.
-            If a numpy.ndarray of a shape (2,n) is used, it is assumed to contain x, y
+            If a ndarray of a shape (2,n) is used, it is assumed to contain x, y
             coordinates.
         threshold : float
             distance band
@@ -1251,11 +1251,11 @@ class Graph(SetOpsMixin):
 
         Parameters
         ----------
-        data : numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+        data : ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
             geometries over which to compute a kernel. If a geopandas object with Point
-            geoemtry is provided, the .geometry attribute is used. If a numpy.ndarray
+            geoemtry is provided, the .geometry attribute is used. If a ndarray
             with shapely geoemtry is used, then the coordinates are extracted and used.
-            If a numpy.ndarray of a shape (2,n) is used, it is assumed to contain x, y
+            If a ndarray of a shape (2,n) is used, it is assumed to contain x, y
             coordinates. If metric="precomputed", data is assumed to contain a
             precomputed distance metric.
         kernel : string or callable (default: 'gaussian')
@@ -1359,11 +1359,11 @@ class Graph(SetOpsMixin):
 
         Parameters
         ----------
-        data : numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+        data : ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
             geometries over which to compute a kernel. If a geopandas object with Point
-            geoemtry is provided, the .geometry attribute is used. If a numpy.ndarray
+            geoemtry is provided, the .geometry attribute is used. If a ndarray
             with shapely geoemtry is used, then the coordinates are extracted and used.
-            If a numpy.ndarray of a shape (2,n) is used, it is assumed to contain x, y
+            If a ndarray of a shape (2,n) is used, it is assumed to contain x, y
             coordinates.
         k : int
             number of nearest neighbors.
@@ -1501,9 +1501,9 @@ class Graph(SetOpsMixin):
 
         Parameters
         ----------
-        data : numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+        data : ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
             Geometries that need matches. If a geopandas object is provided, the
-            ``.geometry`` attribute is used. If a numpy.ndarray with a geometry dtype
+            ``.geometry`` attribute is used. If a ndarray with a geometry dtype
             is used, then the coordinates are extracted and used.
         k : int
             Number of matches for each observation.
@@ -1553,12 +1553,12 @@ class Graph(SetOpsMixin):
 
         Parameters
         ----------
-        data : numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+        data : ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
             geometries containing locations to compute the
             delaunay triangulation. If a geopandas object with Point
-            geoemtry is provided, the .geometry attribute is used. If a numpy.ndarray
+            geoemtry is provided, the .geometry attribute is used. If a ndarray
             with shapely geoemtry is used, then the coordinates are extracted and used.
-            If a numpy.ndarray of a shape (2,n) is used, it is assumed to contain x, y
+            If a ndarray of a shape (2,n) is used, it is assumed to contain x, y
             coordinates.
         method : str, (default "delaunay")
             method of extracting the weights from triangulation. Supports:
@@ -2495,7 +2495,7 @@ class Graph(SetOpsMixin):
 
         Returns
         -------
-        numpy.ndarray
+        ndarray
             array of numeric|categorical values for the spatial lag
 
         Examples

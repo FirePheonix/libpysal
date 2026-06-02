@@ -872,7 +872,7 @@ class W:
 
         Parameters
         ----------
-        new_ids : list, numpy.ndarray
+        new_ids : list, ndarray
             Aligned list of new ids to be inserted. Note that first
             element of ``new_ids`` will replace first element of
             ``w.id_order``, second element of ``new_ids`` replaces second
@@ -1274,12 +1274,12 @@ class W:
             return
 
     def full(self):
-        """Generate a full ``numpy.ndarray``.
+        """Generate a full ``ndarray``.
 
         Returns
         -------
         (fullw, keys) : tuple
-            The first element being the full ``numpy.ndarray`` and second
+            The first element being the full ``ndarray`` and second
             element keys being the ids associated with each row in the array.
 
         Examples

@@ -133,11 +133,11 @@ def _delaunay(coordinates, coplanar):
 
     Parameters
     ----------
-    coordinates :  numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+    coordinates :  ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
         geometries containing locations to compute the delaunay triangulation.  If
         a geopandas object with Point geoemtry is provided, the .geometry attribute
-        is used. If a numpy.ndarray with shapely geoemtry is used, then the
-        coordinates are extracted and used.  If a numpy.ndarray of a shape (2,n) is
+        is used. If a ndarray with shapely geoemtry is used, then the
+        coordinates are extracted and used.  If a ndarray of a shape (2,n) is
         used, it is assumed to contain x, y coordinates.
     ids : numpy.narray (default: None)
         ids to use for each sample in coordinates. Generally, construction functions
@@ -217,11 +217,11 @@ def _gabriel(coordinates, coplanar):
 
     Parameters
     ----------
-    coordinates :  numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+    coordinates :  ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
         geometries containing locations to compute the delaunay triangulation.  If
         a geopandas object with Point geoemtry is provided, the .geometry attribute
-        is used. If a numpy.ndarray with shapely geoemtry is used, then the
-        coordinates are extracted and used.  If a numpy.ndarray of a shape (2,n) is
+        is used. If a ndarray with shapely geoemtry is used, then the
+        coordinates are extracted and used.  If a ndarray of a shape (2,n) is
         used, it is assumed to contain x, y coordinates.
     ids : numpy.narray (default: None)
         ids to use for each sample in coordinates. Generally, construction functions
@@ -290,11 +290,11 @@ def _relative_neighborhood(coordinates, coplanar):
 
     Parameters
     ----------
-    coordinates :  numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+    coordinates :  ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
         geometries containing locations to compute the delaunay triangulation.  If
         a geopandas object with Point geoemtry is provided, the .geometry attribute
-        is used. If a numpy.ndarray with shapely geoemtry is used, then the
-        coordinates are extracted and used.  If a numpy.ndarray of a shape (2,n) is
+        is used. If a ndarray with shapely geoemtry is used, then the
+        coordinates are extracted and used.  If a ndarray of a shape (2,n) is
         used, it is assumed to contain x, y coordinates.
     ids : numpy.narray (default: None)
         ids to use for each sample in coordinates. Generally, construction functions
@@ -350,11 +350,11 @@ def _voronoi(coordinates, coplanar, clip="bounding_box", rook=True):
 
     Parameters
     ---------
-    coordinates :  numpy.ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
+    coordinates :  ndarray, geopandas.GeoSeries, geopandas.GeoDataFrame
         geometries containing locations to compute the delaunay triangulation.  If
         a geopandas object with Point geoemtry is provided, the .geometry attribute
-        is used. If a numpy.ndarray with shapely geoemtry is used, then the
-        coordinates are extracted and used.  If a numpy.ndarray of a shape (2,n) is
+        is used. If a ndarray with shapely geoemtry is used, then the
+        coordinates are extracted and used.  If a ndarray of a shape (2,n) is
         used, it is assumed to contain x, y coordinates.
     ids : numpy.narray (default: None)
         ids to use for each sample in coordinates. Generally, construction functions
